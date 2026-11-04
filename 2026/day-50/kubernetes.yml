@@ -1,0 +1,164 @@
+kubectl version
+kubectl cluster-info
+
+kubectl get nodes
+kubectl describe node <node-name> # displays detailed info of specific node
+
+
+kubectl run my-pod --image=nginx
+  - cmd to create a single pod using nginx as image
+kubectl create deployment my-app --image=nginx
+  - this runs a pod inside deployment, if pod crashes, then deployment will auto-create a pod
+kubectl scale deployment my-app --replicas=3
+  - used to manage the inc traffic and load
+
+
+kubectl get statefulsets
+  - in statefulSet the pod name and storage is fixed
+kubectl create job my-job --image=busybox
+  - runs once to complete the task
+kubectl get daemonsets
+  - daemonSet automatically runs pod on every node
+
+
+kubectl create configmap app-config --from-literal=ENV=production
+kubectl create secret generic db-pass --from-literal=password=12345
+
+kubectl get pvc
+
+explain in hinglish in short and in key points:
+explain the flow in english in short interview style
+
+
+kubectl get gateway
+kubectl get httproute
+
+
+kubectl apply --server-side -f https://github.com
+kubectl apply -f 
+
+# 1. Install Gateway API CRDs (one-time, standard channel)
+kubectl apply --server-side -f https://github.com
+
+# 2. Create the Gateway Infrastructure
+kubectl apply -f - <<EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: my-gateway
+spec:
+  gatewayClassName: cilium # change to your controller's class if not using Cilium
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+EOF
+
+# 3. Create HTTPRoute for Traffic Routing
+kubectl apply -f - <<EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: shop-routes
+spec:
+  parentRefs:
+    - name: my-gateway
+  hostnames:
+    - "shop.com"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /cart
+      backendRefs:
+        - name: cart-service
+          port: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /pay
+      backendRefs:
+        - name: checkout-service
+          port: 80
+
+
+explain in hinglish in short and in key points:
+explain the flow in english in short interview style
+
+kubectl create namespace dev
+kubectl get pods -n dev -l app=frontend
+kubectl autoscale deployment my-app --min=2 --max-10 --cpu-percent=80
+
+
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+
+explain in short in Hinglish and also provide an interview-style answer in english
+explain in the flow in short in Hinglish and also provide short interview-style answer in english
+
+spec:
+  initContainers:
+    - name: wait-for-db
+      image: busybox
+      command: ['sh', '-c', 'until nslookup mydb; do sleep2; done;']
+
+  containers:
+    - name: main-app
+    image: my-app:v1
+
+
+kubectl taint nodes nodel key=value:NoSchedule
+
+tolerations:
+  - key: "key"
+    operator: "Equal"
+    value: "value"
+    effect: "NoSchedule"
+
+------------------------
+
+
+terraform:
+
+sudo apt-get update
+
+wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+sudo apt update && sudo apt install terraform
+
+
+aws login
+paste the url in browser
+
+
+aws configure , it will ask for AccessKey
+search for IAM 
+created adya-user with fullS3access
+
+go to the credentials of the user and create the access key
+paste it in the server: 
+paste the secret and access key in server
+add the aws region: eu-north-1
+
+-------------
+
+devops-server-key.pem
+
+C:\Users\Aditymad\.ssh\devops-server-key.pem
+
+
+
+
+
+
+
+
+
+

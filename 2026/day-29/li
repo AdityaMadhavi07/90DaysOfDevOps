@@ -1,0 +1,74 @@
+🚀 From “It should work” to “It finally works!” — My Docker + AWS Learning Journey
+
+This week, I tried deploying my frontend application using Docker on an AWS EC2 instance… and what I thought would take 30 minutes turned into a full debugging adventure 🧩
+
+Here’s how it went:
+
+👉 I started with a simple goal:  
+Run my app with Docker and access it via browser on EC2.
+
+Sounds easy, right? Not quite.
+
+🔴 Phase 1: Disk Full Panic  
+My instance had only 8GB storage. The moment I built the Docker image:
+
+df -h → 100% full
+✅ Fixed it by increasing EBS volume → and learning that resizing disk ≠ resizing filesystem.
+
+
+🔴 Phase 2: “docker ps” shows NOTHING  
+Container not running. No output. Confusion.
+
+✅ Learned to use:
+docker ps -a  
+docker logs
+
+→ Found that containers were crashing immediately.
+
+
+🔴 Phase 3: The Hidden Trap  
+Error:  write EPIPE (esbuild crash)
+
+✅ Root cause: I was using Node 24  
+👉 Fix: Switched to Node 20 (LTS)
+💡 Lesson: *Latest is not always stable.*
+
+
+🔴 Phase 4: It works… but not in browser 😐
+
+* `curl localhost:5173` ✅
+* Browser ❌
+✅ Fix: Opened port 5173 in AWS Security Group
+💡 Lesson: *Cloud networking matters.*
+
+
+🔴 Phase 5: The Silent Killer  
+Container kept stopping randomly.
+
+
+✅ Root cause: Using `npm run dev` (Vite dev server)  
+👉 Not meant for production / Docker stability
+✅ Final Fix:
+* Built app (`npm run build`)
+* Served using `serve`
+
+
+✅ Final Result:
+* Docker container running ✅
+* App accessible via browser ✅
+* No crashes ✅
+
+
+💡 Biggest Takeaways:
+
+* Debugging > tutorials
+* Logs are your best friend
+* Dev vs Production setup matters
+* LTS versions save you hours
+* Cloud = compute + networking
+
+This wasn’t just deployment — it was a full real-world DevOps debugging experience.
+
+#DevOps #Docker #AWS #Kubernetes #LearningByDoing #CloudComputing #SoftwareDevelopment
+
+        
