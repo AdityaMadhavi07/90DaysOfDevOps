@@ -168,29 +168,82 @@ on:
 
 jobs:
   test-python:
-    name: Python ${{ matrix.version }} on ${{ matrix.os }}
+    name: Python ${{ matrix.python-version }} on ${{ matrix.os }}
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+
+        python-version:
+          - "3.10"
+          - "3.11"
+          - "3.12"
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Print Python Version
+        run: python --version
+
+      - name: Print OS Version
+        run: echo "Running on ${{ matrix.os }}"
+
 
 ---------------------------------------------------------------------------
-Task X:
+Task 5: excluding a combination:
+
+1. strategy:
+     matrix:
+       os:
+         - ubuntu-latest
+         - windows-latest
+
+       python-version:
+         - "3.10"
+         - "3.11"
+         - "3.12"
+
+       exclude:
+         - os: windows-latest
+           python-version: "3.10"
 
 
+Note: now total number of jobs reduce by 1. (6-1=5 jobs will run now)
+
+2. test fail-fast: false
+   
+   fail-fast: "false"
+   
+   strategy:
+     fail-fast: "false"
+
+steps:
+    - name: Fail one matrix combinatio intentionally
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
+      run: exit 1
 
 
----------------------------------------------------------------------------
-Task X:
+Note: 
+- this will fail the pipeline for that particular combination, other jobs will continue running
+- in a line you must use similar type of inverted commas
+- if your yaml file has syntactical errors then the pipeline name wont be listed in the LHS of github actions page. it will be listed as a path like: ".github/workflows/schdeule.yml"
 
 
-
-
----------------------------------------------------------------------------
-Task X:
-
-
-
-
----------------------------------------------------------------------------
-Task X:
-
+3. Fail-fast: true vs fail-fast: false
+   - fail-fast:true this is the default behaviour. one matrix job fails then other jobs are stopped/cancelled
+   - failfast: even if one matrix job fail, remaining matrix jobs continue running
+     - useful when we want to know the failing combinations
+  
 
 
 
