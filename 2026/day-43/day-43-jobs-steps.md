@@ -214,7 +214,7 @@ jobs:
     steps:
       - name: Print branch type
         run: |
-          if [ "${{ github.ref }} == "refs/heads/main "]; then
+          if [ "${{ github.ref }}" == "refs/heads/main"]; then
             echo "this is a main branch push"
           else
             echo "this is a feature branch push"
